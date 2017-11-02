@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+		<title>week-6-ajax</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+
+	</head>
+	<body>
+		<section>
+			<div>
+				
+			</div>
+			<div id="display"></div>
+		</section>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script>
+			//3jY8asZVJLtFhttz5JIK9zC6kmVzwHfo
+			size = function(obj) {
+			    var size = 0, key;
+			    for (key in obj) {
+			        if (obj.hasOwnProperty(key)) size++;
+			    }
+			    return size;
+			}
+			var search_term = "google"
+			var queryURL = "http://api.giphy.com/v1/gifs/search?q="+search_term+"&api_key=3jY8asZVJLtFhttz5JIK9zC6kmVzwHfo"
+			console.log(queryURL)
+			var search_terms=[]
+			var searches = {}
+
+			$.ajax({
+				queryURL:queryURL,
+				method:'GET'
+			}).done(function(response){
+				// search_terms.push(search_term)
+				// searches[searchterm]=response
+				// for(i=0;i<size(response);i++){
+				// 	$("#display").html($("#display").html()+"<image id='image"+i+"' src='"+response.i.images.original.url+"'></image>")
+				// }
+				// console.log($("#display").html())
+			})
+
+
+
+
+
+
+
+
+
+
+		</script>
+	</body>
+	<footer>
+		
+	</footer>
+</html>
