@@ -8,14 +8,35 @@
 
 	</head>
 	<body>
-		<section>
-			<div>
-				
-			</div>
-			<div id="display"></div>
-		</section>
+    <section>
+		<div><button onclick="clear()" id="clearbutton">Clear</button></div>
+      	<div id="buttons_here"></div>
+        	<form id="search_form">
+          	<label for="search_input">Search for something</label>
+          	<input type="text" id="search_input"><br>
+          	<button class="button_type">Search Button</button>
+        </form>
+      <div id="display"></div>
+    </section>	
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script>
+			var searches = {}
+			var search_terms = []
+			var buttons = ""
+			// if(localStorage!=''){
+			// 	if(localStorage.getItem(searches)!=''){
+			// 		var searches = localStorage.getItem(searches)
+			// 		console.log("init1: "+searches)
+			// 	}
+			// 	if(localStorage.getItem(search_terms)!=''){
+			// 		var search_terms = localStorage.getItem(search_terms)
+			// 		console.log("init2: "+search_terms)
+			// 	}
+			// 	if(localStorage.getItem(buttons)!=''){
+			// 		var buttons = localStorage.getItem(buttons)
+			// 		console.log("init3: "+buttons)
+			// 	}
+			// }
 			//3jY8asZVJLtFhttz5JIK9zC6kmVzwHfo
 			size = function(obj) {
 			    var size = 0, key;
@@ -24,24 +45,73 @@
 			    }
 			    return size;
 			}
-			var search_term = "google"
+	    	$("#clearbutton").on("click",function(event){
+	    		event.preventDefault();
+	    		clear()
+	    	})
+			function clear(){
+				console.log("clearing")
+				// localStorage.setItem(searches,"")
+				// localStorage.setItem(search_terms,"")
+				// localStorage.setItem(buttons,"")
+				// localStorage.clear()
+				searches = {}
+				search_terms = []
+				buttons = ""
+				$("#search_input").val("")
+				$("#display").html("")
+				$("#buttons_here").html("")
+			}
+			function buttonclick(value){
+				console.log("buttonclick")
+				console.log(value)
+				$("#display").html("")
+				if(search_terms.indexOf(search_term)!=-1){
+					$("#display").html(searches[value])
+				}
+				else{
+					$("#search_input").val(value)
+				}
+			}
+			var search_term = ""
 			var queryURL = "http://api.giphy.com/v1/gifs/search?q="+search_term+"&api_key=3jY8asZVJLtFhttz5JIK9zC6kmVzwHfo"
-			console.log(queryURL)
-			var search_terms=[]
-			var searches = {}
+	    	$(".button_type").on("click",function(event){
+	    		event.preventDefault();
+	    		search_term = $("#search_input").val()
+	    		if(search_term!=""){
+		    		if(search_terms.indexOf(search_term)==-1){
+		    			queryURL = "http://api.giphy.com/v1/gifs/search?q="+search_term+"&api_key=3jY8asZVJLtFhttz5JIK9zC6kmVzwHfo"
+		    			console.log("queryURL: "+queryURL)
+						$.ajax({
+							url:queryURL,
+							method:'GET'
+						}).done(function(response){
+							console.log("here")
+							search_terms.push(search_term)
+							// console.log(size(response.data))
+							console.log("response: "+response)
+							searches[search_term]=""
+							for(i=0;i<size(response.data);i++){
+								searches[search_term]=searches[search_term]+"<image id='image"+i+"' src='"+response.data[i]["images"]["original"]["url"]+"'></image>"
 
-			$.ajax({
-				queryURL:queryURL,
-				method:'GET'
-			}).done(function(response){
-				// search_terms.push(search_term)
-				// searches[searchterm]=response
-				// for(i=0;i<size(response);i++){
-				// 	$("#display").html($("#display").html()+"<image id='image"+i+"' src='"+response.i.images.original.url+"'></image>")
-				// }
-				// console.log($("#display").html())
+							}
+							buttons = buttons+"<button class='topbutton' onclick='buttonclick(value)' id='button_"+search_term+"' value='"+search_term+"'>"+search_term+"</button>"
+							$("#buttons_here").html(buttons)
+							console.log("buttons2: "+buttons)
+							$("#display").html(searches[search_term])
+							console.log("searches: "+searches[search_term])
+							// localStorage.setItem(buttons,buttons)
+						})
+					}
+				}
+				$("#display").html(searches[search_term])
+				$("#search_input").val("")
+				// localStorage.setItem(searches,searches)
+				// localStorage.setItem(search_terms,search_terms)
+				// console.log("buttons1: "+buttons)
+				// localStorage.setItem(buttons,$("#buttons_here").html())
+				// console.log(localStorage.getItem("buttons: "+buttons))
 			})
-
 
 
 
